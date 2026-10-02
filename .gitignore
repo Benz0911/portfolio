@@ -1,0 +1,8 @@
+# Source material, not part of the site.
+# The CV has personal contact details and unredacted screenshots; the photo is the original of assets/img/backdrop-photo.webp.
+*.pdf
+*.jfif
+
+# OS clutter
+Thumbs.db
+.DS_Store

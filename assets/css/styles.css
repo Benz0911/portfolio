@@ -1,0 +1,584 @@
+/*
+ * Benz M. De Guzman — portfolio
+ * Theme: one page at a time on a dark navy backdrop (blurred purple city + flickering squares),
+ * Inter, lavender outline pills.
+ */
+
+:root {
+    --bg: #0f121e;
+    --overlay-top: rgb(15 18 30 / 0.7);
+    --overlay-bottom: rgb(15 18 30 / 0.92);
+    --square: rgb(189 199 255 / 0.06);
+
+    --ink: #ffffff;
+    --text: rgb(255 255 255 / 0.75);
+    --muted: rgb(255 255 255 / 0.55);
+    --accent: #b094ff;
+    --accent-soft: rgb(176 148 255 / 0.12);
+    --accent-line: rgb(176 148 255 / 0.4);
+    --line: rgb(255 255 255 / 0.12);
+    --card: rgb(255 255 255 / 0.04);
+    --dialog: #161a2b;
+    --dialog-backdrop: rgb(8 10 18 / 0.9);
+
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --text-size: clamp(16px, 1.43vw, 20px);
+    --gap: clamp(16px, 2.3vw, 32px);
+
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: var(--text-size);
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+}
+
+strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+code,
+kbd {
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--card);
+    color: var(--ink);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.82em;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+[tabindex="-1"]:focus {
+    outline: none;
+}
+
+/* The icon sprite: `hidden` doesn't apply to <svg>, so take it out of the flow here. */
+.sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 10;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: 16px;
+}
+
+/* ---------- Backdrop ---------- */
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(var(--overlay-top) 0%, var(--overlay-bottom) 80%),
+        url("../img/backdrop-photo.webp") 72% 28% / cover no-repeat,
+        var(--bg);
+}
+
+.squares {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.squares rect {
+    fill: var(--square);
+    opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .squares rect {
+        animation: flicker 9s ease-in-out infinite;
+    }
+
+    .squares rect:nth-child(3n) { animation-duration: 6.4s; animation-delay: -2.1s; }
+    .squares rect:nth-child(3n + 1) { animation-duration: 11s; animation-delay: -5.3s; }
+    .squares rect:nth-child(4n) { animation-delay: -3.7s; }
+    .squares rect:nth-child(5n) { animation-duration: 7.7s; animation-delay: -1.2s; }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 0.3; }
+    15% { opacity: 0.9; }
+    25%, 55% { opacity: 0; }
+    70% { opacity: 1; }
+    80% { opacity: 0.9; }
+}
+
+/* ---------- Pages: one shown at a time once JavaScript runs ---------- */
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(48px, 9vh, 96px) 0;
+}
+
+.js .page {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.page[hidden] {
+    display: none;
+}
+
+.page--top {
+    justify-content: flex-start;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .js .page {
+        animation: page-in 0.45s ease both;
+    }
+}
+
+@keyframes page-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+.inner {
+    width: min(100% - 64px, 820px);
+    margin-inline: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+h1,
+h2.page-title {
+    font-size: clamp(40px, 4.6vw, 64px);
+    line-height: 1.15;
+}
+
+h2.page-title {
+    margin-top: clamp(28px, 3vw, 40px);
+}
+
+/* Your name on the home page: tall condensed capitals, opened up with letter spacing. */
+h1.name {
+    font-family: "Bebas Neue", var(--font);
+    font-weight: 400;
+    font-size: clamp(54px, 6.4vw, 88px);
+    line-height: 1;
+    letter-spacing: 0.08em;
+}
+
+h3,
+h4 {
+    margin-top: clamp(36px, 4vw, 52px);
+    font-size: clamp(19px, 1.7vw, 24px);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+p {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+}
+
+.lead {
+    max-width: 36em;
+}
+
+.meta {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.85em;
+    line-height: 1.7;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8em;
+    height: clamp(52px, 4.8vw, 68px);
+    padding: 0 clamp(26px, 2.6vw, 36px);
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: var(--text-size);
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--accent-soft);
+}
+
+.btn svg {
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.btn--small {
+    height: clamp(42px, 3.6vw, 52px);
+    padding: 0 clamp(20px, 1.8vw, 26px);
+    font-size: clamp(14px, 1.15vw, 16px);
+}
+
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    margin-top: clamp(28px, 3.4vw, 48px);
+}
+
+/* ---------- Projects (all on the Work page) ---------- */
+
+.project {
+    margin-top: clamp(48px, 5vw, 72px);
+    padding-top: clamp(48px, 5vw, 72px);
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 24px;
+}
+
+.project h3 {
+    margin-top: 0;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.project h4 {
+    margin-top: clamp(26px, 2.8vw, 36px);
+}
+
+.points {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.points li {
+    position: relative;
+    margin-top: 10px;
+    padding-left: 1.4em;
+}
+
+.points li::before {
+    content: "";
+    position: absolute;
+    left: 0.2em;
+    top: 0.8em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tags li {
+    padding: 2px 12px;
+    border: 1px solid var(--accent-line);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.shots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: start;
+    margin-top: 20px;
+}
+
+.shot {
+    margin: 0;
+}
+
+.shot a {
+    display: block;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    cursor: zoom-in;
+    transition: border-color 0.2s ease;
+}
+
+.shot a:hover {
+    border-color: var(--accent-line);
+}
+
+.shot img {
+    width: 100%;
+    border-radius: 7px;
+}
+
+.shot figcaption {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.note {
+    color: var(--muted);
+    font-size: 0.8em;
+}
+
+.project + .note {
+    margin-top: clamp(48px, 5vw, 72px);
+}
+
+/* ---------- About ---------- */
+
+.portrait {
+    width: clamp(96px, 9vw, 128px);
+    height: auto;
+    aspect-ratio: 1;
+    margin-top: clamp(28px, 3vw, 40px);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.portrait + h2.page-title {
+    margin-top: 20px;
+}
+
+.timeline {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid var(--line);
+}
+
+.timeline > li {
+    position: relative;
+    padding: 0 0 26px 26px;
+    line-height: 1.6;
+}
+
+.timeline > li::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 0.45em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.timeline > li:last-child {
+    padding-bottom: 0;
+}
+
+.when {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8em;
+    letter-spacing: 0.02em;
+}
+
+.role {
+    display: block;
+    margin-top: 2px;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.where {
+    display: block;
+}
+
+.timeline .projects {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85em;
+}
+
+.plain-list {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.plain-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.6;
+}
+
+.plain-list li:last-child {
+    border-bottom: 0;
+}
+
+.plain-list .when {
+    margin-top: 2px;
+}
+
+/* ---------- Contact ---------- */
+
+.contact-links {
+    display: grid;
+    gap: 10px;
+    margin: clamp(24px, 2.8vw, 36px) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.contact-links li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+}
+
+.contact-links .label {
+    min-width: 5.5em;
+    color: var(--muted);
+    font-size: 0.85em;
+}
+
+/* Missing details: loud on purpose, so they can't ship unnoticed. */
+[data-placeholder] {
+    padding: 1px 8px;
+    border: 1px dashed var(--accent);
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.85em;
+}
+
+/* ---------- Lightbox ---------- */
+
+.lightbox {
+    width: min(1600px, 94vw);
+    max-width: none;
+    max-height: 94vh;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--dialog);
+    color: var(--text);
+}
+
+.lightbox::backdrop {
+    background: var(--dialog-backdrop);
+}
+
+.lightbox img {
+    width: 100%;
+    max-height: calc(94vh - 90px);
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.lightbox-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 4px 2px;
+}
+
+.lightbox-caption {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.lightbox-close {
+    flex: none;
+    height: 38px;
+    padding: 0 18px;
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.lightbox-close:hover {
+    background: var(--accent-soft);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+    .shots {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-row {
+        gap: 14px;
+    }
+}
